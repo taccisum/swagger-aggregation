@@ -1,11 +1,11 @@
-package com.github.taccisum.swagger.aggregation.support.sc.gateway;
+package com.github.taccisum.swagger.aggregation;
 
-import com.github.taccisum.swagger.aggregation.SwaggerResourceAggregator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import springfox.documentation.swagger.web.*;
 
@@ -17,8 +17,9 @@ import java.util.Optional;
  * @author taccisum - liaojinfeng@deepexi.com
  * @since 2019-12-16
  */
+@RestController
 @RequestMapping("/swagger-resources")
-public abstract class SwaggerResourceController {
+public class SwaggerResourceController {
     @Autowired(required = false)
     private SecurityConfiguration securityConfiguration;
     @Autowired(required = false)
