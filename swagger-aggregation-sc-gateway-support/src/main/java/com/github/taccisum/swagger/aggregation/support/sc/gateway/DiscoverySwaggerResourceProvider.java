@@ -27,7 +27,10 @@ public class DiscoverySwaggerResourceProvider implements SwaggerResourcesProvide
     public List<SwaggerResource> get() {
         List<SwaggerResource> ls = new ArrayList<>();
         definitionLocator.getRouteDefinitions().subscribe(definition -> {
-            ls.add(this.extractor.extract(definition));
+            SwaggerResource resource = this.extractor.extract(definition);
+            if (resource != null) {
+                ls.add(resource);
+            }
         });
         return ls;
     }

@@ -3,6 +3,7 @@ package com.github.taccisum.swagger.aggregation.support.sc.gateway.extractor;
 import com.github.taccisum.swagger.aggregation.SwaggerResourceExtractor;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinition;
+import org.springframework.util.StringUtils;
 import springfox.documentation.swagger.web.SwaggerResource;
 
 /**
@@ -16,7 +17,13 @@ public class DiscoverySwaggerResourceExtractor implements SwaggerResourceExtract
 
         if (predicate != null) {
             SwaggerResource resource = new SwaggerResource();
-            String appId = predicate.getArgs().get("pattern").replace("/**", "");
+            String pattern = predicate.getArgs().get("pattern");
+            String appId = null;
+            if (!StringUtils.isEmpty(pattern)) {
+                appId = pattern.replace("/**", "");
+            } else {
+                return null;
+            }
             resource.setName(appId);
             resource.setLocation(appId + "/v2/api-docs");
             resource.setSwaggerVersion("2.0");
