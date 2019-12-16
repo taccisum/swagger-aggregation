@@ -18,6 +18,20 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- provided start-->
+        <dependency>
+            <groupId>com.github.taccisum</groupId>
+            <artifactId>swagger-aggregation-sc-gateway-support</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- provided end-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
