@@ -1,5 +1,6 @@
 package com.github.taccisum.swagger.aggregation.support.sc.gateway;
 
+import com.github.taccisum.swagger.aggregation.SwaggerResourceAggregator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import reactor.core.publisher.Mono;
 import springfox.documentation.swagger.web.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,13 +23,8 @@ public abstract class SwaggerResourceController {
     private SecurityConfiguration securityConfiguration;
     @Autowired(required = false)
     private UiConfiguration uiConfiguration;
-
-    private final SwaggerResourcesProvider swaggerResources;
-
-    @Autowired
-    public SwaggerResourceController(SwaggerResourcesProvider swaggerResources) {
-        this.swaggerResources = swaggerResources;
-    }
+    @Autowired(required = false)
+    private SwaggerResourceAggregator swaggerResourceAggregator;
 
     @GetMapping("/configuration/security")
     public Mono<ResponseEntity<SecurityConfiguration>> securityConfiguration() {
@@ -40,8 +38,9 @@ public abstract class SwaggerResourceController {
                 Optional.ofNullable(uiConfiguration).orElse(UiConfigurationBuilder.builder().build()), HttpStatus.OK));
     }
 
-    @GetMapping("")
-    public Mono<ResponseEntity> swaggerResources() {
-        return Mono.just((new ResponseEntity<>(swaggerResources.get(), HttpStatus.OK)));
+    @GetMapping
+    public Mono<ResponseEntity<List<SwaggerResource>>> swaggerResources() {
+        return Mono.just(new ResponseEntity(
+                swaggerResourceAggregator != null ? swaggerResourceAggregator.get() : new ArrayList<>(), HttpStatus.OK));
     }
 }
