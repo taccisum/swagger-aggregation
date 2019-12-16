@@ -11,6 +11,7 @@
 
     <modules>
         <module>swagger-aggregation-core</module>
+        <module>swagger-aggregation-sc-gateway-support</module>
     </modules>
 
     <dependencies>
