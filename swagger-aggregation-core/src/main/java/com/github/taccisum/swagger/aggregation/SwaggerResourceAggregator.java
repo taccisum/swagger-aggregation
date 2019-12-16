@@ -1,6 +1,7 @@
 package com.github.taccisum.swagger.aggregation;
 
 import com.google.common.base.Supplier;
+import lombok.extern.slf4j.Slf4j;
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @author taccisum - liaojinfeng@deepexi.com
  * @since 2019-12-16
  */
+@Slf4j
 public class SwaggerResourceAggregator {
     private List<SwaggerResourcesProvider> providers;
 
@@ -38,6 +40,15 @@ public class SwaggerResourceAggregator {
                     })
                     .orElse(new ArrayList<>());
         }
+
+        for (SwaggerResource resource : resources) {
+            log.debug("Swagger resource found: {}", toS(resource));
+        }
+
         return resources;
+    }
+
+    private String toS(SwaggerResource resource) {
+        return String.format("name: %s, url: %s, version: %s", resource.getName(), resource.getUrl(), resource.getSwaggerVersion());
     }
 }
