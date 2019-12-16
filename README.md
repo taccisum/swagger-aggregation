@@ -53,7 +53,9 @@ swagger.aggregation.resources[0].url=/custom_location
 
 若注册中心中有注册其它服务，其 swagger 文档会自动展示在聚合页面中。
 
+### 示例工程
 
+https://github.com/taccisum/swagger-aggregation-sample
 
 
 
