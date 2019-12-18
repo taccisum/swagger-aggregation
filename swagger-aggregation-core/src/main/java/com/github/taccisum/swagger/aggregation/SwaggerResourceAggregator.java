@@ -8,6 +8,8 @@ import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.taccisum.swagger.aggregation.utils.ToStringUtils.toS;
+
 /**
  * @author taccisum - liaojinfeng@deepexi.com
  * @since 2019-12-16
@@ -46,9 +48,5 @@ public class SwaggerResourceAggregator {
         }
 
         return resources;
-    }
-
-    private String toS(SwaggerResource resource) {
-        return String.format("name: %s, url: %s, version: %s", resource.getName(), resource.getUrl(), resource.getSwaggerVersion());
     }
 }
