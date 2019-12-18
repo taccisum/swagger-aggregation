@@ -4,6 +4,7 @@ import com.github.taccisum.swagger.aggregation.SwaggerResourceExtractor;
 import com.github.taccisum.swagger.aggregation.support.sc.gateway.extractor.DiscoverySwaggerResourceExtractor;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
+import reactor.core.publisher.Flux;
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 
@@ -26,12 +27,15 @@ public class DiscoverySwaggerResourceProvider implements SwaggerResourcesProvide
     @Override
     public List<SwaggerResource> get() {
         List<SwaggerResource> ls = new ArrayList<>();
-        definitionLocator.getRouteDefinitions().subscribe(definition -> {
+        Flux<RouteDefinition> definitions = definitionLocator.getRouteDefinitions();
+
+        for (RouteDefinition definition : definitions.toIterable()) {
             SwaggerResource resource = this.extractor.extract(definition);
             if (resource != null) {
                 ls.add(resource);
             }
-        });
+        }
+
         return ls;
     }
 

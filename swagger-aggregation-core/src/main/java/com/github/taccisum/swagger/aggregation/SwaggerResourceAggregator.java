@@ -1,6 +1,5 @@
 package com.github.taccisum.swagger.aggregation;
 
-import com.google.common.base.Supplier;
 import lombok.extern.slf4j.Slf4j;
 import springfox.documentation.swagger.web.SwaggerResource;
 import springfox.documentation.swagger.web.SwaggerResourcesProvider;
@@ -33,7 +32,11 @@ public class SwaggerResourceAggregator {
         } else {
             resources = providers.
                     stream()
-                    .map(Supplier::get)
+                    .map(provider -> {
+                        List<SwaggerResource> ls = provider.get();
+                        log.debug("{} resources found via {}.", ls.size(), provider.getClass());
+                        return ls;
+                    })
                     .reduce((a, b) -> {
                         List<SwaggerResource> ls = new ArrayList<>();
                         ls.addAll(a);
@@ -44,7 +47,7 @@ public class SwaggerResourceAggregator {
         }
 
         for (SwaggerResource resource : resources) {
-            log.debug("Swagger resource found: {}", toS(resource));
+            log.warn("Swagger resource found: {}", toS(resource));
         }
 
         return resources;
