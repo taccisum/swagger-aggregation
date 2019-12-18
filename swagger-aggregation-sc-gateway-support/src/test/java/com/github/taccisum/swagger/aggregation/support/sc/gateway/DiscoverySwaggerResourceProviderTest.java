@@ -8,8 +8,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 import springfox.documentation.swagger.web.SwaggerResource;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -33,7 +31,7 @@ public class DiscoverySwaggerResourceProviderTest {
         DiscoverySwaggerResourceProvider provider = new DiscoverySwaggerResourceProvider(locator);
         provider.setExtractor(extractor);
 
-        List<SwaggerResource> resources = provider.get();
-        assertThat(resources.size()).isEqualTo(2);
+        Flux<SwaggerResource> resources = provider.get();
+        assertThat(resources.count().block()).isEqualTo(2);
     }
 }

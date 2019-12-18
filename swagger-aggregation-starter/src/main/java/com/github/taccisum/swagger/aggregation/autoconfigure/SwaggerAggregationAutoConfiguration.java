@@ -1,7 +1,9 @@
 package com.github.taccisum.swagger.aggregation.autoconfigure;
 
+import com.github.taccisum.swagger.aggregation.ReactiveSwaggerResourceAggregator;
+import com.github.taccisum.swagger.aggregation.ReactiveSwaggerResourceController;
+import com.github.taccisum.swagger.aggregation.ReactiveSwaggerResourceProvider;
 import com.github.taccisum.swagger.aggregation.SwaggerResourceAggregator;
-import com.github.taccisum.swagger.aggregation.SwaggerResourceController;
 import com.github.taccisum.swagger.aggregation.provider.PropertiesSwaggerResourceProvider;
 import com.github.taccisum.swagger.aggregation.support.sc.gateway.DiscoverySwaggerResourceProvider;
 import com.github.taccisum.swagger.aggregation.support.sc.gateway.ScGatewaySwaggerSupportIndicator;
@@ -23,20 +25,14 @@ import java.util.List;
  */
 @ImportAutoConfiguration({
         SwaggerAggregationAutoConfiguration.ScGatewaySupportAutoConfiguration.class,
-        SwaggerAggregationAutoConfiguration.PropertiesSwaggerResourceAutoConfiguration.class
+        SwaggerAggregationAutoConfiguration.PropertiesSwaggerResourceAutoConfiguration.class,
+        SwaggerAggregationAutoConfiguration.SupportReactiveAutoConfiguration.class
 })
 public class SwaggerAggregationAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public SwaggerResourceAggregator swaggerResourceAggregator(List<SwaggerResourcesProvider> providers) {
         return new SwaggerResourceAggregator(providers);
-    }
-
-    @Bean
-    @ConditionalOnClass(Mono.class)
-    @ConditionalOnMissingBean
-    public SwaggerResourceController swaggerResourceController() {
-        return new SwaggerResourceController();
     }
 
     @EnableConfigurationProperties(SwaggerAggregationProperties.class)
@@ -47,11 +43,26 @@ public class SwaggerAggregationAutoConfiguration {
         }
     }
 
+    @ConditionalOnClass(Mono.class)
+    public static class SupportReactiveAutoConfiguration {
+        @Bean
+        @ConditionalOnMissingBean
+        public ReactiveSwaggerResourceAggregator reactiveSwaggerResourceAggregator(List<ReactiveSwaggerResourceProvider> providers) {
+            return new ReactiveSwaggerResourceAggregator(providers);
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public ReactiveSwaggerResourceController swaggerResourceController() {
+            return new ReactiveSwaggerResourceController();
+        }
+    }
+
     @ConditionalOnClass(ScGatewaySwaggerSupportIndicator.class)
     @ConditionalOnProperty(value = "swagger.aggregation.discovery.enabled", havingValue = "true", matchIfMissing = true)
     public static class ScGatewaySupportAutoConfiguration {
         @Bean
-        public SwaggerResourcesProvider discoverySwaggerResourceProvider(RouteDefinitionLocator definitionLocator) {
+        public ReactiveSwaggerResourceProvider discoverySwaggerResourceProvider(RouteDefinitionLocator definitionLocator) {
             return new DiscoverySwaggerResourceProvider(definitionLocator);
         }
     }
