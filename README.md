@@ -13,6 +13,8 @@
 
 ## 如何使用
 
+> 此项目暂时未发布到 maven central，请先通过 clone 源码到本地执行 mvn install 使用 
+
 引入依赖
 
 ```xml
