@@ -7,8 +7,6 @@ import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.util.StringUtils;
 import springfox.documentation.swagger.web.SwaggerResource;
 
-import static com.github.taccisum.swagger.aggregation.utils.ToStringUtils.toS;
-
 /**
  * @author taccisum - liaojinfeng@deepexi.com
  * @since 2019-12-16
@@ -34,7 +32,6 @@ public class DiscoverySwaggerResourceExtractor implements SwaggerResourceExtract
             resource.setName(appId);
             resource.setLocation(appId + "/v2/api-docs");
             resource.setSwaggerVersion("2.0");
-            log.debug("swagger resource found: {}", toS(resource));
             return resource;
         } else {
             log.debug("can not found swagger resource.");
