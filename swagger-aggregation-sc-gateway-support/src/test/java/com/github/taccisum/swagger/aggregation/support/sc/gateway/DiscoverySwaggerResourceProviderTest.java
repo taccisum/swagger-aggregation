@@ -34,4 +34,22 @@ public class DiscoverySwaggerResourceProviderTest {
         Flux<SwaggerResource> resources = provider.get();
         assertThat(resources.count().block()).isEqualTo(2);
     }
+
+    @Test
+    public void getOnExtractNull() {
+        RouteDefinition def1 = mock(RouteDefinition.class);
+        RouteDefinition def2 = mock(RouteDefinition.class);
+
+        when(locator.getRouteDefinitions()).thenReturn(
+                Flux.just(def1, def2)
+                        .subscribeOn(Schedulers.parallel())
+        );
+        when(extractor.extract(any())).thenReturn(null);
+
+        DiscoverySwaggerResourceProvider provider = new DiscoverySwaggerResourceProvider(locator);
+        provider.setExtractor(extractor);
+
+        Flux<SwaggerResource> resources = provider.get();
+        assertThat(resources.count().block()).isEqualTo(0);
+    }
 }

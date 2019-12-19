@@ -8,6 +8,8 @@ import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import reactor.core.publisher.Flux;
 import springfox.documentation.swagger.web.SwaggerResource;
 
+import java.util.Optional;
+
 /**
  * @author taccisum - liaojinfeng@deepexi.com
  * @since 2019-12-16
@@ -26,13 +28,23 @@ public class DiscoverySwaggerResourceProvider implements ReactiveSwaggerResource
         if (definitionLocator == null) {
             return Flux.empty();
         } else {
+//            return Flux.empty();
             return definitionLocator
                     .getRouteDefinitions()
-                    .map(definition -> this.extractor.extract(definition));
+                    .map(definition -> {
+                        return Optional.ofNullable(this.extractor.extract(definition)).orElse(new Null());
+                    })
+                    .filter(resource -> {
+                        return !(resource instanceof Null);
+                    })
+                    ;
         }
     }
 
     public void setExtractor(SwaggerResourceExtractor<RouteDefinition> extractor) {
         this.extractor = extractor;
+    }
+
+    private class Null extends SwaggerResource {
     }
 }
